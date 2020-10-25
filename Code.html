@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Consumer / Mortgage Loan App</title>
+
+    <!--Bootstrap core CSS-->
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/bootstrap-grid.min.css" rel="stylesheet" />
+    <link href="Content/LoanCalculatorStyle.css" rel="stylesheet" />
+    <link href="Content/prism-css.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-Light static-top">
+        <div class="container">
+            <a><img class="navbar-brand" src="/Images/favicon-32x32.png" /></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Index.html" />
+
+                        Home
+                        <a href="#" Portfolio />
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Solve.html">Solve</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Code</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Git</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="//ojolmo-fs-portfolio.netlify.app">Portfolio</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-10 text-success"><h1>How to use the Consumer / Mortgage Loan App</h1>
+            </div>
+                <hr />
+            <div class="row">
+                <div class="col-12">
+                    <pre class="line-numbers language-js">
+                        <code>
+     function loanResults() {
+        let amount = document.getElementById("amountLoan").value;
+        let months = document.getElementById("monthsLoan").value;
+        let interest = document.getElementById("rateLoan").value;
+        //Calculate and converts to decimal
+        let principal = parseFloat(amount);
+        let calculateInterest = parseFloat(interest) / 100 / 12;
+        let calculatePayments = parseFloat(months)
+        //Compute monthly Payment
+        let x = Math.pow(1 + calculateInterest, calculatePayments);
+        let monthly = (principal * x * calculateInterest) / (x - 1);
+        let monthlyPayment = monthly.toFixed(2);
+        //Compute Interest
+        let totalInterest = (monthly * calculatePayments - principal).toFixed(2);
+        //Compute Total Payment
+        let totalPayment = (monthly * calculatePayments).toFixed(2);
+        //Compute Principal Payment
+        let prinPayment = (totalPayment - monthlyPayment).toFixed(2);
+        //Show Summary Results
+        document.getElementById("mPayments").innerHTML = "$" + monthlyPayment;
+        document.getElementById("iRPayments").innerHTML = "$" + totalInterest;
+        document.getElementById("Payments").innerHTML = "$" + totalPayment;
+        document.getElementById("princialPayment").innerHTML = "$" + prinPayment;
+        //New array created
+        let intRate = 0;
+        let loanBalance = totalPayment;
+        let newPrincipal = principal;
+        let newInterestAmount = 0;
+        //Iterates and stores the array
+        let array = new Array();
+        for (let i = 0; i < months && totalPayment > 0; i++) {
+            newInterestAmount = calculateInterest * newPrincipal;
+            newPrincipal = newPrincipal - (monthlyPayment - newInterestAmount);
+            loanBalance -= monthly;
+            intRate += newInterestAmount;
+            array[i] = new Array();
+            array[i][0] = (i + 1).toFixed(0);//Months
+            array[i][1] = parseFloat(monthly).toFixed(2);//Monthly payment
+            array[i][2] = i == months - 1 ? 0.00 : newPrincipal.toFixed(2);//Principal balance
+            array[i][3] = i == months - 1 ? 0.00 : newInterestAmount.toFixed(2);//Interest
+            array[i][4] = parseFloat(intRate).toFixed(2);//Accrued interest
+            array[i][5] = i == months - 1 ? 0.00 : parseFloat(loanBalance).toFixed(2);//Total balance
+        }
+        //Table
+        let table = document.getElementById("results").getElementsByTagName("tbody")[0];
+            for (let j = 0; table.rows.length > 0; j++) {
+            table.deleteRow(-1);//Deletes the last row in the table
+            }
+        //Outputs table to HTML
+        for (let i = 0; i < months; i++) {
+        let row = table.insertRow();
+        var loanTable = `<td>${(array[i][0])}</td><td>${(array[i][1])}</td><td>${(array[i][2])}</td>
+                            <td>${(array[i][3])}</td><td>${(array[i][4])}</td><td>${(array[i][5])}</td>`;
+        row.innerHTML = loanTable;
+        }
+        return;
+        }
+    //Clear button function
+    function reset() {
+        document.getElementById("amountLoan").value = "";
+        document.getElementById("monthsLoan").value = "";
+        document.getElementById("rateLoan").value = "";
+        document.getElementById("mPayments").value = "";
+        document.getElementById("princialPayment").value = "";
+        document.getElementById("iRPayments").value = "";
+        document.getElementById("Payments").value = "";
+        }
+                        </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+ 
+
+    <script src="Scripts/bootstrap.bundle.js"></script>
+    <script src="/Scripts/MortgageCode.js"></script>
+    <script src="Scripts/prism-js.js"></script>
+
+</body>
+</html>
